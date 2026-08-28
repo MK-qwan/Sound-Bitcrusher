@@ -38,3 +38,11 @@ A Python command-line application that allows the user to record an audio for a 
 
 ```bash
 pip install sounddevice numpy scipy librosa soundfile
+````
+
+To bundle this project into a standalone .exe file for Windows, use PyInstaller.
+Because scipy, librosa, and scikit-learn rely on dynamic C-extensions and hidden submodules, run the following command to ensure all dependencies are properly bundled into a single executable:
+
+```bash
+pyinstaller --onefile --collect-all scipy --collect-all librosa --collect-all sklearn Bitcrushing.py
+````
