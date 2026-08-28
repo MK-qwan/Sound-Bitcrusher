@@ -30,20 +30,19 @@ A Python command-line application that allows the user to record an audio for a 
 ---
 
 #REQUIREMENTS FOR CODE MODIFICATION:
-** Python 3.10+
-** Libraries:
-- ** sounddevice
-- ** numpy
-- ** scipy
-- ** librosa
-- ** soundfile
+**Python 3.10+
+**Libraries:
+- **sounddevice
+- **numpy
+- **scipy
+- **librosa
+- **soundfile
 ```bash
 pip install sounddevice numpy scipy librosa soundfile
 ```
 
 **To bundle this project into a standalone .exe file for Windows, use PyInstaller.
-
-Because scipy, librosa, and scikit-learn rely on dynamic C-extensions and hidden submodules, run the following command to ensure all dependencies are properly bundled into a single file:
+** Because scipy, librosa, and scikit-learn rely on dynamic C-extensions and hidden submodules, run the following command to ensure all dependencies are properly bundled into a single file:
 ```bash
 pyinstaller --onefile --collect-all scipy --collect-all librosa --collect-all sklearn Bitcrushing.py
 ```
