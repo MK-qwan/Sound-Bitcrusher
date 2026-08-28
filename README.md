@@ -9,6 +9,7 @@ A Python command-line application that allows the user to record an audio for a 
 3. Finally, a value for "bit-depth" and the "hold_factor" is asked to apply the bitcrush effects which consists of two main steps:
    * **Bit-depth: Quantization (Bit depth reduction)**
      - Any audio signal consists of volume levels scaled between -1.0 and 1.0
+     - Usually, there are 44100 samples per second because historically, audio CDs adopted 44.1 kHz.
      - The original audio is usually in float32 format (providing 2^32 ≈ 4.2 billion possible levels, a very precise audio)
      - The entered value of "bit depth" redefines the available levels using 2^(bit_depth)
      - For example, a bit depth of 10 results 2^10 = 1024 possible levels
