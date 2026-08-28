@@ -46,5 +46,4 @@ pip install sounddevice numpy scipy librosa soundfile
 Because scipy, librosa, and scikit-learn rely on dynamic C-extensions and hidden submodules, run the following command to ensure all dependencies are properly bundled into a single file:
 ```bash
 pyinstaller --onefile --collect-all scipy --collect-all librosa --collect-all sklearn Bitcrushing.py
-```bash
-pyinstaller --onefile --collect-all scipy --collect-all librosa --collect-all sklearn Bitcrushing.py
+```
