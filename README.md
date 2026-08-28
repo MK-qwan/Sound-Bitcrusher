@@ -21,7 +21,7 @@ A Python command-line application that allows the user to record an audio for a 
      - Then, we take the {hold_factor}-th sample, and copy it {hold_factor-1} times etc.
      - For example, if we got a DF=3 and : "abc def ghi jkl mno pqr stu vwx yz" , it would give us: "aaa ddd ggg jjj mmm ppp sss vvv yy"
      - The rest is discarded
-     - That's why the higher, the more robot-like it sounds
+     - That's why the higher the value is, the more robot-like it sounds
 
 4. **FILE SAVING:** WAV Export: Automatically saves original, pitched/stretched, and bitcrushed WAV files.
 
