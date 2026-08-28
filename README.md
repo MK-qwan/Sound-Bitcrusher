@@ -20,7 +20,7 @@ A Python command-line application that allows the user to record an audio for a 
      - We freeze the sound value over multiple samples to create the "choppy" effect
      - On 5*44100 we take sample #1, copy it {hold_factor-1} times
      - Then, we take the {hold_factor}-th sample, and copy it {hold_factor-1} times etc.
-     - For example, if we got a DF=3 and :
+     - For example, if we got a HF=3 and :
      - "abc def ghi jkl mno pqr stu vwx yz" , it would give us:
      - "aaa ddd ggg jjj mmm ppp sss vvv yy"
      - The rest is discarded
