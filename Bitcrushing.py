@@ -9,9 +9,7 @@ import time
 print("""
 WELCOME USER OF "BITCRUSHER"
 
-Where here only sound is bit crushed at YOUR desire!
-"""
-)
+Where here only sound is bit crushed at YOUR desire!""")
 
 
 def apply_bitcrush(audio, bit_depth, hold_factor):
@@ -48,110 +46,153 @@ def apply_bitcrush(audio, bit_depth, hold_factor):
 
 def main():
 
-    while True:
-        print("In this case, choose your variables:\n")
+    # A BUNCH OF CONTINUE VARIABLES BECAUSE I DON'T LIKE USING "break" THAT MUCH
+    continue0=1
+    continue1=1
+    continue2=1
+    continue3=1         #4 because we got 4 loops
 
-        # --- Recording parameters ---
-        duree = float(input("How long should the recording last? (in seconds): "))          # Duration in seconds
-        name=input("How your file will be named : ")
-        # SAMPLING FREQUENCY: to reproduce 99% of the sound; historically, audio CDs adopted 44.1 kHz.
-        FS = 44100
-        Channels = 1
-        print(f"\n\nGood\n\nLet's start your {duree} seconds recording in ", end="")
+    while continue0==1:
         
-        for i in range(3, 0, -1):
-            print(f"{i}... ", end="", flush=True)
-            time.sleep(1)
-        print("\nNOW!\n..........\n")
+        continue0=1
+        continue1=1
+        continue2=1
+        continue3=1 
+        
+        while continue1==1:
+            print("\nIn this case, choose your variables:\n")
 
-        # 1. RECORDING
-        recording = sd.rec(int(duree * FS), samplerate=FS, channels=Channels, dtype="float32")
-        sd.wait()
+            # --- Recording parameters ---
+            duree = float(input("How long should the recording last? (in seconds): "))          # Duration in seconds
+            name=input("How your file will be named : ")
+            # SAMPLING FREQUENCY: to reproduce 99% of the sound; historically, audio CDs adopted 44.1 kHz.
+            FS = 44100
+            sample_rate=FS
+            Channels = 1
+            print(f"\nGood\n\nLet's start your {duree} seconds recording in ", end="")
 
-        # 2. Saving the original file
-        original_file = name+".wav"
-        write(original_file, FS, recording)
+            for i in range(3, 0, -1):
+                print(f"{i}... ", end="", flush=True)
+                time.sleep(1)
+            print("\nNOW!\n..........\n")
 
-        print(f"""
-Original file saved! : {original_file}
-But before the showdown, would you like to change
-the pitch and the speed of your recording?
+            # 1. RECORDING
+            recording = sd.rec(int(duree * FS), samplerate=FS, channels=Channels, dtype="float32")
+            sd.wait()
 
-""")
+            # 2. Saving the original file
+            original_file = name+".wav"
+            write(original_file, FS, recording)
 
-        res = input("y/n: ").lower()
+            print(f"Original file saved! : {original_file}")
+        
+            print("Before applying the changes, are you satisfied with your audio? : y/n    ", end="")
+            res=input().lower()
+                
+            while res not in ("y", "n"):
+                print("NOT A VALID ANSWER...\nTry again : ", end="")
+                res=input().lower()
 
-        if res not in ("y", "n"):
-            print("NOT A VALID ANSWER...")
-            return
+            if res=='y':
+                continue1=0
+        
+        print("\nGood!\nBut before the showdown, would you like to change the pitch and the speed of your recording? : y/n    ", end="")
+        res = input().lower()
+
+        while res not in ("y", "n"):
+            print("NOT A VALID ANSWER...\nTry again : ", end="")
+            res=input().lower()
         
         # 3. Voice synthesis
         if res == "y":
-            print("\nThen, shall we proceed.\n")
+            while continue2==1:
+                print("\nThen, shall we proceed.\n")
 
-            pitch = float(
+                pitch = float(
+                    input(
+                        "Write down the value of your pitch (minus before the value means lower pitch!): "
+                        )
+                )
+                speed = float(
+                    input("Good, now how about the speed? (example: 1.2 means 20% faster): ")
+                )
+
+                # 3.1. Load the existing audio file
+                recording, sample_rate = librosa.load(original_file, sr=None, mono=True)
+
+                # 3.2. Pitch Shift
+                # n_steps = number of semitones (+4 = higher pitch/robot voice, -4 = lower pitch)
+                recording = librosa.effects.pitch_shift(
+                    recording, sr=sample_rate, n_steps=pitch
+                    )
+
+                # 3.3. Change speed (Time Stretch)
+                # rate = 1.2 (20% faster), rate = 0.8 (20% slower)
+                recording = librosa.effects.time_stretch(recording, rate=speed)
+
+                # 3.4. Save the new file
+                sf.write("new_"+name+".wav", recording, sample_rate)
+
+                print("\nNEW AUDIO FILE SAVED WITH SUCCESS!\n")
+
+                print("Are you satisfied with your modified audio? : y/n    ", end="")
+                res=input().lower()
+                
+                while res not in ("y", "n"):
+                    print("NOT A VALID ANSWER...\nTry again : ", end="")
+                    res=input().lower()
+
+                if res=='y':
+                    continue2=0
+
+        if res=='n':
+            print("\nAs you wish.\n")
+
+        print("A \"BIT\" More before the outcome!\n")
+
+        while continue3==1:
+            bit_depth = int(
+                input("Bit-depth: the lower the value is, the more saturated the sound gets: ")
+            )
+
+            hold_factor = int(
                 input(
-                    "Write down the value of your pitch (minus before the value means lower pitch!): "
+                    "The hold factor: the higher it is, the more robot-like the record gets: "
                 )
             )
-            speed = float(
-                input("\nGood, now how about the speed? (example: 1.2 means 20% faster): ")
+
+            # 4. Applying the Bit-Crush effect
+            bit_audio = apply_bitcrush(
+                recording, bit_depth=bit_depth, hold_factor=hold_factor
             )
 
-            # 3.1. Load the existing audio file
-            recording, sample_rate = librosa.load(original_file, sr=None, mono=True)
+            # 4. Saving the modified file
+            new_file = "bitcrushed.wav"
+            sf.write(new_file, bit_audio, sample_rate)
 
-            # 3.2. Pitch Shift
-            # n_steps = number of semitones (+4 = higher pitch/robot voice, -4 = lower pitch)
-            recording = librosa.effects.pitch_shift(
-                recording, sr=sample_rate, n_steps=pitch
-            )
+            print(f"\nHave fun listening to your new voice: {new_file}\nAre you satified by it?: y/n    ", end="")
+            res=input().lower()
+                
+            while res not in ("y", "n"):
+                print("NOT A VALID ANSWER...\nTry again : ", end="")
+                res=input().lower()
 
-            # 3.3. Change speed (Time Stretch)
-            # rate = 1.2 (20% faster), rate = 0.8 (20% slower)
-            recording = librosa.effects.time_stretch(recording, rate=speed)
+            if res=='y':
+                continue3=0
 
-            # 3.4. Save the new file
-            sf.write("new_"+name+".wav", recording, sample_rate)
+        print("\n\nWould you like to bitcrush another audio? : y/n   ", end="")
+        replay = input().lower()
 
-            print("\nNEW AUDIO FILE SAVED WITH SUCCESS!\n")
-
-        else:
-            print("As you wish\n")
-
-            sample_rate = FS
-
-            recording = recording.flatten()
-
-        print("\nA \"BIT\" More before the outcome!\n")
-
-        bit_depth = int(
-            input("Bit-depth: the lower the value is, the more saturated the sound gets: ")
-        )
-
-        hold_factor = int(
-            input(
-                "\nThe hold factor: the higher it is, the more robot-like the record gets: "
-            )
-        )
-
-        # 4. Applying the Bit-Crush effect
-        bit_audio = apply_bitcrush(
-            recording, bit_depth=bit_depth, hold_factor=hold_factor
-        )
-
-        # 4. Saving the modified file
-        new_file = "bitcrushed.wav"
-        sf.write(new_file, bit_audio, sample_rate)
-        print(f"\nHave fun listening to your new voice: {new_file}")
-
-        replay = input("\n\nWould you like to bitcrush another audio? : y/n   ").lower()
+        while res not in ("y", "n"):
+                print("NOT A VALID ANSWER...\nTry again : ", end="")
+                res=input().lower()
+        
         if replay == 'y':
             print("\nThen shall we continue!\n")
             print("=" * 40)
         else:
             print("See you next time")
-            break
+            continue0=0
 
 
 if __name__ == "__main__":
